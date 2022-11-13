@@ -8,9 +8,6 @@
 </head>
 
 <style>
-    *{
-        background-color:rgba(255, 254, 252, 0.99);
-    }
     #box{
         height:150px;
         width:100%;
@@ -70,6 +67,8 @@
     #Middle-page{
         background: radial-gradient(#fff,#c1eafb);
         height:550px;
+        display: flex;
+        flex-direction: row;
     }
     #Middle-page>img{
         height:500px;
@@ -78,35 +77,33 @@
         box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
     
     }
-    #Middle-page>div.form-container{
-        height:400px;
+    #Middle-page>.form-container{
+        height:350px;
         width:300px;
         border:2px solid white;
-        margin-left: 1000px;
-        margin-top: -450px;
+        margin-top: 25px;
+        margin-left: 200px;
+        /* margin-left: 1000px; */
+        /* margin-top: -450px; */
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
         text-align: center;
+        padding-top: 150px;
     }
-    .form-btn{
-        padding-top:20px;
-        
-    
+    #register{
+        display: none;
+        font-weight: 600;
+        font-size:20px;
     }
-    .form-btn span{
-        font-weight: 700;
+    a{
+        text-decoration: underline;
+        color: blue;
+    }
+    #login{
+        font-weight: 600;
         font-size: 20px;
-        color:rgb(31, 29, 29);
-        padding:0 10px;
-        cursor: pointer;
+    }
+    
         
-
-    }
-    #Middle-page>div.box form{
-        display:inline-block;
-    }
-
-    
-  
-    
         
 
     
@@ -132,42 +129,92 @@
     </div>
 
     <div id="Middle-page">
-        <img src="https://adqatar.com/wp-content/uploads/2020/08/online-sell.jpg" alt="AB"/>
+          <img src="https://adqatar.com/wp-content/uploads/2020/08/online-sell.jpg" alt="AB"/>
           
 
           <div class="form-container">
-            <div class="form-btn">
-               <span>Login</span>
-               <span>Register</span>
-            </div>
-          <div class="box">
-            <form>
-                <input type="text" placeholder="Username">
-                <input type="password" placeholder="Password">
-                <button type="submit" class="btn">Login</button>
-                <a href="">Forget Password</a>
+
+
+            <form id="login">
+                <div class="form-btn">
+                    <span>Login</span>
+                 </div>
+                <input id='text' type="text" placeholder="Username">
+                <div>
+                    <label>--------------------------------</label>
+                </div>
+                
+                <input id='password' type="password" placeholder="Password">
+                <div>
+                    <button type="submit" class="btn" onclick="loginHandler(document.getElementById('text').value,document.getElementById('password').value)">Login</button>
+                </div>
+                <div>
+                    If not a user click here to <a onclick="toggler('register')">Register</a>
+                </div>
+                
+                <div>
+                    <a href="">Forget Password</a>
+                </div>
 
             </form>
-            <form>
+            <form id="register">
+                <div>Register</div>
                 <input type="text" placeholder="Username">
                 <input type="text" placeholder="Email">
                 <input type="password" placeholder="Password">
-                <button type="submit" class="btn">Register</button>
+                <div>
+                    <button type="submit" class="btn">Register</button>
+                </div>
+                <div>
+                    Already a user click here to <a onclick="toggler('login')">Login</a>
+                </div>
+                
                 
             </form>
-          </div>
-           
 
           </div>
 
-        
-        
 
-         
+          </div>
+
               
      </div>
      
     
     
 </body>
+<script>
+    // document.getElementById("login").addEventListener("click",toggler)
+    const toggler=(name)=>{
+        console.log(document.getElementById(name).style.display)
+        var x = document.getElementById(name);
+        if(name==='register'){
+            document.getElementById("login").style.display="none";
+            document.getElementById("register").style.display="block";
+        }
+        if(name==='login'){
+            document.getElementById("register").style.display="none";
+            document.getElementById("login").style.display="block";
+        }
+        // x.style.display = 'none';
+        // if(name==='register'){
+        //     document.getElementById('register').style.display="block"
+        //     document.getElementById('login').style.display='hidden'
+        // }
+        // if(name==='login'){
+        //     document.getElementById('register').style.display="hidden"
+        //     document.getElementById('login').style.display='block'
+        // }
+    }
+
+    const loginHandler=(id,password)=>{
+        event.preventDefault();
+        if(id == 'shobhit' && password == 'shobhit@123'){
+            alert("Login Successfull!");
+            window.location.replace("./index.html");
+        }else{
+            alert("Username or Password is wrong!")
+        }
+    }
+</script>
 </html>

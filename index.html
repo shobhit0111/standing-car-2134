@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,100 +9,221 @@
 </head>
 
 <style>
-    *{
-        background-color:rgba(255, 254, 252, 0.99);
-    }
-    #box{
-        height:150px;
-        width:100%;
-        background-color: rgb(223, 216, 216);
-    }
-    #box>img{
+    #box {
         height: 150px;
-        margin-left:650px ;
+        width: 100%;
+        background-color: rgb(255, 244, 244);
     }
-    #nav{
-        height:60px;
-        width:100%;
+
+    #box>img {
+        height: 150px;
+        margin-left: 650px;
+    }
+
+    #nav {
+        height: 60px;
+        width: 100%;
         border: 2px solid black;
-        display:flex;
+        display: flex;
         background-color: rgb(255, 252, 239);
-        border-bottom-style:ridge;
-        
-        
+        border-bottom-style: ridge;
+
+
     }
-    #nav>input{
+
+    #nav>input {
         margin-top: 10px;
         margin-left: 40px;
         font-size: 17px;
-        font-weight:20px;
-        width:40%;
+        font-weight: 20px;
+        width: 40%;
         margin-bottom: 10px;
         border-radius: 50px;
         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
     }
-    #nav>h1{
+
+    #nav>h1 {
         margin-left: 80px;
-        font-size: 25px;
+        font-size: 20px;
         font-style: italic;
-        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
     }
-    .container{
+
+    .container {
         margin-left: 50px;
-        display:flex;
-        gap:50px;
+        display: flex;
+        gap: 50px;
         font-size: 20px;
         margin-top: 20px;
 
     }
-    .container :nth-child(1){
+
+    .container :nth-child(1) {
         color: black;
         font-weight: 600;
-    
+
     }
-    .container :nth-child(2){
-        color:maroon;
+
+    .container :nth-child(2) {
+        color: maroon;
         font-weight: 600;
 
     }
-    .container :nth-child(3){
-        color:darkblue;
+
+    .container :nth-child(3) {
+        color: darkblue;
         font-weight: 600;
 
     }
-    #nav>a{
+
+    #nav>a {
         margin-left: 100px;
         margin-top: 15px;
         font-size: 25px;
         font-weight: 600;
-        color:rgb(29, 4, 52);
+        color: rgb(29, 4, 52);
+    }
+
+    #Products {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        margin-top: 20px;
+        gap: 10px;
+        margin-left: 5px;
+        
+
     }
     
-
 </style>
 
 
 <body>
     <div id="box">
-        <img src="file:///C:/Users/rhythm/Downloads/gIANT%20E-STORE.png" alt="GS"/>
+        <img src="file:///C:/Users/rhythm/Downloads/gIANT%20E-STORE.png" alt="GS" />
     </div>
-    
-    
+
+
     <div id="nav">
         <h1>Giant E-Store</h1>
-    
-        <input type="text" placeholder="Search Products..." name="search">
-        
+
+        <input id="search" type="text" placeholder="Search Products..." name="search">
+        <button onclick="searchhandler()">search</button>
+
         <div class="container">
-            
+
             <a href="./index.html">Home</a>
-            <a href="./cart.html">Cart</a>
             <a href="./payment.html">Payment</a>
         </div>
         <a href="./login.html">Login</a>
 
     </div>
+    <div id="Products">
+
+    </div>
+
+    <!-- <footer class="Sticky-footer">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About_us</a></li>
+            <li><a href="#">contact</a></li>
+            <li><a href="#">help</a></li>
+            <li><a href="#">Career</a></li>
+        </ul>
+    </footer> -->
     
-    
+
+
+
 </body>
+<script>
+    let data = {};
+    function searchhandler() {
+        let text = document.getElementById("search");
+        var myHeaders = new Headers();
+        myHeaders.append("x-rapidapi-host", " asos2.p.rapidapi.com");
+        myHeaders.append("x-rapidapi-key", "fd480e0940msh78391fd467f6df1p19a1cdjsn5b44b474c8ab");
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("https://asos2.p.rapidapi.com/products/v2/list?store=US&offset=0&categoryId=4209&limit=48", requestOptions)
+            .then(async result => {
+                let out = await result.json();
+                data = out;
+                let text = document.getElementById("search").value;
+                if (text)
+                    display(out, text);
+                else
+                    display(out, "");
+
+            })
+            .catch(error => console.log('error', error));
+    }
+
+    async function display(out, text = "") {
+        async function fiterList() {
+            out.products = out.products.filter(x => {
+                return x.name.toLowerCase().includes(text.toLowerCase());
+            });
+        }
+
+        if (text) {
+            await fiterList().then(() => {
+                document.querySelector("#Products").remove();
+                let products = document.createElement("div");
+                products.setAttribute("id", "Products")
+                document.body.append(products)
+                out.products.forEach((el) => {
+                    let div = document.createElement("div");
+                    div.setAttribute(
+                        'style',
+                        'border:1px solid black; padding:20px;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                    );
+                    let image = document.createElement("img");
+                    image.setAttribute("src", `https://${el.imageUrl}`);
+                    let brand = document.createElement("h2");
+                    brand.innerText = `${el.name}`;
+                    let des = document.createElement("p");
+                    des.innerText = `Product Code:${el.description}`;
+                    let price = document.createElement("p");
+                    price.innerText = `₹${el.price.current.value * 10}`;
+                    div.append(image, brand, des, price);
+                    document.querySelector("#Products").append(div);
+                });
+            }
+            )
+        }
+        if (text.length == 0) {
+            document.querySelector("#Products").remove();
+            let products = document.createElement("div");
+            products.setAttribute("id", "Products")
+            document.body.append(products)
+            out.products.forEach((el) => {
+                let div = document.createElement("div");
+                div.setAttribute(
+                    'style',
+                    'border:1px solid black; padding:20px;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px'
+                );
+                let image = document.createElement("img");
+                image.setAttribute("src", `https://${el.imageUrl}`);
+                let brand = document.createElement("h2");
+                brand.innerText = `${el.name}`;
+                let des = document.createElement("p");
+                des.innerText = `Product Code:${el.description}`;
+                let price = document.createElement("p");
+                price.innerText = `₹${el.price.current.value * 10}`;
+
+                div.append(image, brand, des, price);
+                document.querySelector("#Products").append(div);
+            });
+        }
+    }
+    searchhandler();
+
+
+</script>
+
 </html>
